@@ -1,0 +1,91 @@
+import graphviz
+
+# Define the flowchart
+flowchart = graphviz.Digraph(comment='App Algorithm')
+
+# Start
+flowchart.node('Start', 'Start\n(a) Initialize the application\n(b) Display Welcome Screen\n(c) Offer options: Sign In, Sign Up, Browse as Guest')
+
+# User Authentication
+flowchart.node('UserAuth', 'User Authentication\n(a) Sign In\n(b) Sign Up\n(c) Browse as Guest')
+
+# Sign In
+flowchart.node('SignIn', 'Sign In\n(i) Prompt user for email and password\n(ii) Verify credentials\n(iii) If valid, redirect to Home Screen\n(iv) If invalid, display error and prompt again')
+
+# Sign Up
+flowchart.node('SignUp', 'Sign Up\n(i) Prompt user for username, email, password, confirm password\n(ii) Validate inputs\n(iii) If valid, create new user account\n(iv) Redirect to Home Screen\n(v) If invalid, display error and prompt again')
+
+# Browse as Guest
+flowchart.node('Guest', 'Browse as Guest\n(i) Redirect to Home Screen with limited functionality')
+
+# Home Screen
+flowchart.node('HomeScreen', 'Home Screen\n(a) Display categories: Living Room, Bedroom, Office, etc.\n(b) Display search bar, cart, profile options\n(c) Wait for user action\n(i) If category selected, go to View Categories\n(ii) If search query entered, go to Search Results\n(iii) If cart selected, go to Cart\n(iv) If profile selected, go to Profile')
+
+# View Categories/Search Results
+flowchart.node('ViewCategories', 'View Categories/Search Results\n(a) Fetch and display items based on category or search query\n(b) Wait for user to select an item\n(c) Redirect to Item Details')
+
+# Item Details
+flowchart.node('ItemDetails', 'Item Details\n(a) Display item details: images, description, price\n(b) Display customization options: material, color, dimensions\n(c) Wait for user action\n(i) If AR view selected, load AR model and enable AR view\n(ii) If customization options selected, update item customization\n(iii) If add to cart selected, add item to cart\n(iv) Redirect to Cart or Home Screen')
+
+# AR View
+flowchart.node('ARView', 'AR View\n(a) Load and display AR model\n(b) Allow user to view item in their space\n(c) Wait for user to exit AR view\n(d) Redirect to Item Details')
+
+# Cart
+flowchart.node('Cart', 'Cart\n(a) Display items in the cart\n(b) Wait for user action\n(i) If edit item selected, redirect to Item Details\n(ii) If remove item selected, update cart\n(iii) If proceed to checkout selected, redirect to Checkout\n(iv) If return to Home Screen selected, redirect to Home Screen')
+
+# Checkout
+flowchart.node('Checkout', 'Checkout\n(a) Prompt user for shipping information\n(b) Prompt user for payment information\n(c) Review order details\n(d) Wait for user confirmation\n(e) If confirmed, process payment and order\n(f) Redirect to Order Confirmation')
+
+# Order Confirmation
+flowchart.node('OrderConfirmation', 'Order Confirmation\n(a) Display order details\n(b) Provide estimated delivery date\n(c) Offer option to track order\n(d) Wait for user action\n(i) If track order selected, provide tracking information\n(ii) If return to Home Screen selected, redirect to Home Screen')
+
+# Profile
+flowchart.node('Profile', 'Profile\n(a) Display user profile information\n(b) Offer options: view order history, manage addresses, manage payment methods, log out\n(c) Wait for user action\n(i) If view order history selected, display order history\n(ii) If manage addresses selected, display and edit addresses\n(iii) If manage payment methods selected, display and edit payment methods\n(iv) If log out selected, log out user and redirect to Welcome Screen')
+
+# End
+flowchart.node('End', 'End\n(a) User interaction is complete')
+
+# Connect nodes
+flowchart.edge('Start', 'UserAuth')
+flowchart.edge('UserAuth', 'SignIn', label='Sign In')
+flowchart.edge('UserAuth', 'SignUp', label='Sign Up')
+flowchart.edge('UserAuth', 'Guest', label='Browse as Guest')
+flowchart.edge('SignIn', 'HomeScreen', label='valid credentials')
+flowchart.edge('SignIn', 'SignIn', label='invalid credentials')
+flowchart.edge('SignUp', 'HomeScreen', label='valid inputs')
+flowchart.edge('SignUp', 'SignUp', label='invalid inputs')
+flowchart.edge('Guest', 'HomeScreen')
+
+flowchart.edge('HomeScreen', 'ViewCategories', label='category selected')
+flowchart.edge('HomeScreen', 'ViewCategories', label='search query entered')
+flowchart.edge('HomeScreen', 'Cart', label='cart selected')
+flowchart.edge('HomeScreen', 'Profile', label='profile selected')
+
+flowchart.edge('ViewCategories', 'ItemDetails', label='item selected')
+
+flowchart.edge('ItemDetails', 'ARView', label='AR view selected')
+flowchart.edge('ItemDetails', 'ItemDetails', label='customization options selected')
+flowchart.edge('ItemDetails', 'Cart', label='add to cart selected')
+
+flowchart.edge('ARView', 'ItemDetails', label='exit AR view')
+
+flowchart.edge('Cart', 'ItemDetails', label='edit item selected')
+flowchart.edge('Cart', 'Cart', label='remove item selected')
+flowchart.edge('Cart', 'Checkout', label='proceed to checkout selected')
+flowchart.edge('Cart', 'HomeScreen', label='return to Home Screen selected')
+
+flowchart.edge('Checkout', 'OrderConfirmation', label='order confirmed')
+
+flowchart.edge('OrderConfirmation', 'HomeScreen', label='return to Home Screen selected')
+
+flowchart.edge('Profile', 'Profile', label='view order history selected')
+flowchart.edge('Profile', 'Profile', label='manage addresses selected')
+flowchart.edge('Profile', 'Profile', label='manage payment methods selected')
+flowchart.edge('Profile', 'Start', label='log out selected')
+
+flowchart.edge('OrderConfirmation', 'OrderConfirmation', label='track order selected')
+flowchart.edge('OrderConfirmation', 'HomeScreen', label='return to Home Screen selected')
+
+# Render the flowchart
+flowchart.render('/mnt/data/design_space_app_flowchart', format='png', cleanup=True)
+'/mnt/data/design_space_app_flowchart.png'
